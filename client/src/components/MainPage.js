@@ -1,18 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import SearchFilter from './patrials/SearchFilter';
+import SearchBar from './patrials/SearchBar';
+import MainFieled from './patrials/MainFieled';
+
+import ParametersPage from './ParametersPage';
+
+const cards = [
+    { lang : "english", value : "not" },
+    { lang : "english", value : "not2" },
+    { lang : "russian", value : "без" },
+    { lang : "russian", value : "не без" },
+]
 
 function MainPage(props) {
-    
-    // before logic
-    const [idx, setIdx] = useState(0);
-
-    function onCick(event) {
-        setIdx(idx + 1);
-    }
 
     return (
         <div>
-            <div className='idx-counter'>{idx}</div>
-            <button onClick={onCick}>+1</button>
+            <div className='main-page'>
+                <div className='serach-panel'>
+                    <SearchBar />
+                </div>
+                <div className='filter-panel'>
+                    <SearchFilter />
+                </div>
+                <div className='result-main-field'>
+                    <MainFieled cards={cards} />
+                </div>
+            </div>
+            <ParametersPage />
         </div>
     );
 }

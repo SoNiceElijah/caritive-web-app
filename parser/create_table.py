@@ -1,8 +1,7 @@
-from distutils.command.build import build
+import sys
 import pandas as pd
-import json
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile
 
 """
 Cerates create_tables.sql from specified path
@@ -28,7 +27,8 @@ def escape(line):
         return None
     return "'" + str(line).replace("'","''") + "'"
 
-files = [f"./data/{f}" for f in listdir('./data') if isfile(f"./data/{f}")]
+glob_path = sys.argv[1]
+files = [f"{glob_path}/{f}" for f in listdir(glob_path) if isfile(f"{glob_path}/{f}")]
 parameters = {}
 for file in files:
     sheets = pd.read_excel(file, None)
