@@ -8,22 +8,21 @@ function ParametersPage(props) {
     useEffect(() => {
        axios.post('/api/parameters/get')
             .then((res) => { 
-                console.log(res.data);
+                console.log(res.data.length);
+                const inColors = {};
+                for(const p of res.data) {
+                    inColors[p.type] = '#' + Math.floor(Math.random() * (2 ** 24)).toString(16).padStart('0',6);
+                }
                 setParameters(res.data);
+                props.setColors(inColors);
              });
-    }, [0]);
-
-    const colors = {};
-
-    for(const p of parameters) {
-        colors[p.type] = '#' + Math.floor(Math.random() * (2 ** 24)).toString(16).padStart('0',6);
-    }
+    }, props.anchor);
 
     function drawParam(param, i) {
         return (
             <div key={i} className='parameter'>
                 <div className='parameter-header'>
-                    <span style={{ backgroundColor : colors[param.type]}} className='parameter-header-color'></span>
+                    <span style={{ backgroundColor : props.colors[param.type]}} className='parameter-header-color'></span>
                     <span className='parameter-header-id'>{param.id}</span>
                     <span className='parameter-header-name'>{param.name}</span>
                 </div>
@@ -41,7 +40,7 @@ function ParametersPage(props) {
     }
 
     return (
-        <div className='parameter-page'>
+        <div className={`parameter-page parameter-page-state-${props.state}`}>
             <h1>Параметры</h1>
             <div className='parameters-list'>
                 {parameters.map(drawParam)}

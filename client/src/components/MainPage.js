@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import SearchFilter from './patrials/SearchFilter';
 import SearchBar from './patrials/SearchBar';
 import MainFieled from './patrials/MainFieled';
-
 import ParametersPage from './ParametersPage';
 
-const cards = [
-    { lang : "english", value : "not" },
-    { lang : "english", value : "not2" },
-    { lang : "russian", value : "без" },
-    { lang : "russian", value : "не без" },
-]
-
+const base = [0];
 function MainPage(props) {
+
+    const [ cards, loadCards ] = useState([]);
+    const [ paramsState, changeParams ] = useState("init");
+    const [ colors, setColors ] = useState({ });
+
+    useEffect(() => {
+        axios.post('/api/markers/get')
+            .then((res) => { 
+                loadCards(res.data);
+             });
+    }, base);
+
+    function clickParams() {
+        if(paramsState === 'hidden' || paramsState === 'init')
+            changeParams("visible");
+        else
+            changeParams("hidden");
+    }
 
     return (
         <div>
@@ -20,14 +33,17 @@ function MainPage(props) {
                 <div className='serach-panel'>
                     <SearchBar />
                 </div>
+                <div className='help-panel'>
+                    <button className='params-help-btn' onClick={clickParams}>Параметры</button>
+                </div>
                 <div className='filter-panel'>
                     <SearchFilter />
                 </div>
                 <div className='result-main-field'>
-                    <MainFieled cards={cards} />
+                    <MainFieled colors={colors} cards={cards} />
                 </div>
             </div>
-            <ParametersPage />
+            <ParametersPage colors={colors} setColors={setColors} state={paramsState} anchor={base} />
         </div>
     );
 }

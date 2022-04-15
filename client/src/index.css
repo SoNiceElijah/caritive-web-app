@@ -89,6 +89,10 @@ input {
 .card {
   margin-top: 10px;
   border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
   padding: 10px;
   background: #f0f0f0;
 
@@ -171,4 +175,85 @@ input {
   background-color: #f0f0f0;
   color: #3d3d3d;
   font-weight: 300;
+}
+
+@keyframes parameter-raise {
+  from {
+    opacity: 0.0;
+    visibility: visible;
+  }
+
+  to {
+    opacity: 1.0;
+  }
+}
+
+@keyframes parameter-hidden {
+  from {
+    opacity: 1.0;
+  }
+
+  to {
+    opacity: 0.0;
+    visibility: hidden;
+  }
+}
+
+.parameter-page-state-init {
+  visibility: hidden;
+}
+
+.parameter-page-state-hidden {
+  animation: parameter-hidden 0.1s forwards;
+}
+
+.parameter-page-state-visible {
+  animation: parameter-raise 0.1s forwards;
+}
+
+.card-body {
+  background-color: #fafafa;
+  transition: 0.2s;
+  height: auto;
+}
+
+.card-body-state-hidden {
+  max-height: 0;
+}
+
+.card-body-state-visible {
+  max-height: 8000px;
+}
+
+.card-record {
+  width: 100%;
+  display: flex;
+}
+
+.card-record-param-id {
+  flex: 1;
+}
+
+.card-record-value {
+  flex: 1;
+}
+
+.card-record-translation {
+  flex: 4;
+}
+
+.card-record-example {
+  flex: 4;
+}
+
+.card-record-source {
+  flex: 3;
+}
+
+.card-record-note {
+  flex: 4;
+}
+
+.card-record-param {
+  padding: 5px;
 }
