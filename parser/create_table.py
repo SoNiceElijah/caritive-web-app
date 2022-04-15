@@ -43,9 +43,24 @@ for file in files:
                 parameters[row[v.columns[0]]] = { 'name' : escape(makeUniversal(name)), 'example' : escape(example), 'type' : escape(type) }
 
 params_query = f"INSERT INTO parameters (\tid, \tname, \texample, \ttype) VALUES\n"
+params_types_query = f"INSERT INTO parameters_types (\tid, \tdescription, \tcolor) VALUES\n"
+
+params_types_tmp = set()
+params_types_map = {}
+params_types_vals = []
+for key in parameters:
+    params_types_tmp.add(parameters[key]['type'])
+i = 0
+for type in params_types_tmp:
+    params_types_vals.append(f"\t({i}, \t{type}, \t0)")
+    params_types_map[type] = i
+    i += 1
+params_types_query += ',\n'.join(params_types_vals) + ';\n\n'
+print(params_types_query)
+
 params_vals = []
 for key in parameters:
-    params_vals.append(f"\t({escape(makeUniversal(key))}, \t{parameters[key]['name']}, \t{parameters[key]['example']}, \t{parameters[key]['type']})")
+    params_vals.append(f"\t({escape(makeUniversal(key))}, \t{parameters[key]['name']}, \t{parameters[key]['example']}, \t{params_types_map[parameters[key]['type']]})")
 params_query += ',\n'.join(params_vals) + ';\n\n'
 print(params_query)
 
