@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 Base = automap_base()
-engine = create_engine("postgresql+psycopg2://elijah:test@localhost/caritive");
+engine = create_engine("postgresql+psycopg2://caritive:dev@localhost/caritive");
 Base.prepare(engine, reflect=True)
 
 def pack(*params):
