@@ -18,5 +18,16 @@ class Record:
         cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
 
-# сделать get_by_marker_id который принимает маркер_айди и возвращает все рекордсы с таким маркер айди
-# тоже в апи
+    @from_keys
+    def get_one_param(self, query: dict):
+        for name, val in query['params'][0].items():
+            param_id = name
+            value = val
+        res = select([self.Records.marker_id]).where(self.Records.param_id == param_id).where(self.Records.value == value)
+        cursor = self.connection.execute(res)
+        return cursor.keys(), cursor.fetchall()
+
+    #@from_keys
+    #def get_by_params(self, query: dict):
+    #    for name, val in query.items():
+            
