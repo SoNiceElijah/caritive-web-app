@@ -20,8 +20,7 @@ def api_records_get():
 
 @requests_controller.route('/api/records/by_marker', methods=["POST", "GET"])
 def api_records_get_by_m_id():
-    m_id = request.args['marker_id'] or request.json['marker_id']
-    print(m_id)
+    m_id = request.json['marker_id']
     return jsonify(mapper.records.get_by_marker_id(m_id))
 
 @requests_controller.route('/api/markers/get', methods=["POST", "GET"])

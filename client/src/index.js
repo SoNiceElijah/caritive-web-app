@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 import MainPage from './components/MainPage';
+import TestRequests from './components/TestRequests';
 
 ReactDOM.render(
   <React.StrictMode>
-    <MainPage />
+    <TestRequests />
   </React.StrictMode>,
   document.getElementById('root')
 );

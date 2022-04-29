@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 from os import listdir
-from os.path import isfile
+from os.path import isfile, basename
 
 """
 Cerates create_tables.sql from specified path
@@ -65,12 +65,13 @@ params_query += ',\n'.join(params_vals) + ';\n\n'
 print(params_query)
 
 i = 0
-markers_query = f"INSERT INTO markers (\tid, \tvalue, \tnote, \texample, \ttranslation, \tsource) VALUES\n"
+markers_query = f"INSERT INTO markers (\tid, \tvalue, \tnote, \texample, \ttranslation, \tsource, \tlang) VALUES\n"
 markers_vals = []
 records_query = f"INSERT INTO records (\tmarker_id, \tparam_id, \tvalue, \tnote, \texample, \ttranslation, \tsource) VALUES\n"
 records_vals = []
 
 for file in files:
+    lang = basename(file.split('_')[0])
     sheets = pd.read_excel(file, None)
     for _, v in sheets.items():
         marker = { 'id' : i }
@@ -88,6 +89,7 @@ for file in files:
         marker['example'] = escape(example)
         marker['translation'] = escape(translation)
         marker['source'] = escape(source)
+        marker['lang'] = escape(lang)
 
         markers_vals.append(buildInsertString(marker))
 
