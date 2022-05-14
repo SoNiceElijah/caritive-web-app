@@ -29,15 +29,9 @@ function MainPage(props) {
 
     return (
         <div>
-            <div className='main-page'>
+            <div className='container mx-auto p-4'>
                 <div className='serach-panel'>
                     <SearchBar />
-                </div>
-                <div className='help-panel'>
-                    <button className='params-help-btn' onClick={clickParams}>Параметры</button>
-                </div>
-                <div className='filter-panel'>
-                    <SearchFilter />
                 </div>
                 <div className='result-main-field'>
                     <MainFieled colors={colors} cards={cards} />
