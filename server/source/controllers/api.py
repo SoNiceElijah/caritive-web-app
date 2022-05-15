@@ -27,31 +27,32 @@ def api_get_by_marker_id():
     marker_id = request.args.get('marker_id')
     return jsonify(mapper.records.get_by_marker_id(marker_id))
 
-@requests_controller.route('/api/get_one_param')
+@requests_controller.route('/api/get_one_param', methods=["POST", "GET"])
 def api_get_one_param():
-    test = {
-    "params" : [
-        { "1b" : '0' },
-        { "1a" : '1' },
-        { "1c" : '1' },
-        { "1d" : 'ND' },
-        { "1e" : '0?' },
-        ],
-    "params_options" : '>2',
-    "target" : 'markers'
-    }
-    return jsonify(mapper.records.get_one_param(test))
+    #print('headers: ', str(request.headers))
+    #print('data: ', str(request.data))
+    query = request.get_json()
+    #print(query)
+    return jsonify(mapper.records.get_one_param(query))
+
+@requests_controller.route('/api/get_by_params', methods=["POST", "GET"])
+def api_get_by_params():
+    #print('headers: ', str(request.headers))
+    #print('data: ', str(request.data))
+    query = request.get_json()
+    #print(query)
+    return jsonify(mapper.records.get_by_parameters(query))
 
 """
 test = {
     "params" : [
-        { "1b" : 0 },
-        { "1a" : 1 },
-        { "1c" : 1 },
-        { "1d" : 'ND' },
-        { "1e" : '0?' },
+        { "1b" : "0" },
+        { "1a" : "1" },
+        { "1c" : "1" },
+        { "1d" : "ND" },
+        { "1e" : "0?" }
     ],
-    "params_options" : '>2',
-    "res_type" : 'markers'
+    "params_options" : ">2",
+    "res_type" : "markers"
 }
 """

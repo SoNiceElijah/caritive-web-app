@@ -1,5 +1,6 @@
+import sqlalchemy
 from .base import Base, engine, from_keys
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 class Record:
     def __init__(self):
@@ -26,6 +27,21 @@ class Record:
         res = select([self.Records.marker_id]).where(self.Records.param_id == param_id).where(self.Records.value == value)
         cursor = self.connection.execute(res)
         return cursor.keys(), cursor.fetchall()
+
+    @from_keys
+    def get_by_parameters(self, query: dict):
+        sql_query = 'SELECT DISTINCT a.marker_id\nFROM records AS a\n'
+        for i, pair in enumerate(query["params"]):
+            code = chr(i+98)
+            for par, val in pair.items():
+                q = f"INNER JOIN records AS {code}\nON a.marker_id={code}.marker_id and {code}.param_id='{par}' and {code}.value='{val}'\n"
+                sql_query = sql_query+q
+        res = text(sql_query)
+        cursor = self.connection.execute(res)
+        return cursor.keys(), cursor.fetchall()
+
+
+
 
     #@from_keys
     #def get_by_params(self, query: dict):

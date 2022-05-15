@@ -29,6 +29,7 @@ def escape(line):
 
 glob_path = sys.argv[1]
 files = [f"{glob_path}/{f}" for f in listdir(glob_path) if isfile(f"{glob_path}/{f}")]
+
 parameters = {}
 for file in files:
     sheets = pd.read_excel(file, None)
@@ -47,7 +48,9 @@ params_vals = []
 for key in parameters:
     params_vals.append(f"\t({escape(makeUniversal(key))}, \t{parameters[key]['name']}, \t{parameters[key]['example']}, \t{parameters[key]['type']})")
 params_query += ',\n'.join(params_vals) + ';\n\n'
-print(params_query)
+#print(params_query)
+with open('output.txt', 'a', encoding='cp1251') as f:
+    f.write('\n'+params_query)
 
 i = 0
 markers_query = f"INSERT INTO markers (\tid, \tvalue, \tnote, \texample, \ttranslation, \tsource) VALUES\n"
@@ -103,5 +106,8 @@ for file in files:
             records_vals.append(buildInsertString(record))
 
 
-print(markers_query + ',\n'.join(markers_vals) + ';\n\n')
-print(records_query + ',\n'.join(records_vals) + ';\n\n')
+#print(markers_query + ',\n'.join(markers_vals) + ';\n\n')
+with open('output.txt', 'a', encoding='cp1251') as f:
+    f.write(markers_query + ',\n'.join(markers_vals) + ';\n\n')
+    f.write(records_query + ',\n'.join(records_vals) + ';\n\n')
+#print(records_query + ',\n'.join(records_vals) + ';\n\n')
