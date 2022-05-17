@@ -10,8 +10,9 @@ class Marker:
     #not tested with limit/offset
     @from_keys
     def get_all(self):
-        limit = int(request.args.get('limit'))
-        skip = int(request.args.get('skip'))
+        # Defaults
+        limit = int(request.args.get('limit', 100))
+        skip = int(request.args.get('skip', 0))
         query = select([self.Markers]).limit(limit).offset(skip)
         cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
@@ -19,6 +20,7 @@ class Marker:
     #not tested
     @from_keys
     def get_all_langs(self):
+        # Все таки лучше select(self.Markers.lang).distinct()
         query = "SELECT DISTINCT lang FROM markers"
         cursor = self.connection.execute(text(query))
         return cursor.keys(), cursor.fetchall()
@@ -26,6 +28,7 @@ class Marker:
     #not tested
     @from_keys
     def get_all_markers_by_lang(self):
+        # Упс... Это все таки должно быть в контроллере [api.py]
         lang = request.args.get('lang')
         #query = f"SELECT DISTINCT marker_id FROM markers WHERE lang='{lang}'"
         query = select([self.Markers.marker_id]).where(self.Markers.lang == lang).distinct()

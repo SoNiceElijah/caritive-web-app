@@ -11,26 +11,17 @@ class Record:
     #not tested with limit/offset
     @from_keys
     def get_all(self):
-        limit = int(request.args.get('limit'))
-        skip = int(request.args.get('skip'))
+        # defaults
+        limit = int(request.args.get('limit', 100))
+        skip = int(request.args.get('skip', 0))
         query = select([self.Records]).limit(limit).offset(skip)
         cursor = self.connection.execute(query)
-        return cursor.fetchall()
+        return cursor.keys(), cursor.fetchall()
 
     @from_keys
     def get_by_marker_id(self, marker_id):
         query = select([self.Records]).where(self.Records.marker_id == marker_id)
         cursor = self.connection.execute(query)
-        return cursor.keys(), cursor.fetchall()
-
-    #эту можно удалить
-    @from_keys
-    def get_one_param(self, query: dict):
-        for name, val in query['params'][0].items():
-            param_id = name
-            value = val
-        res = select([self.Records.marker_id]).where(self.Records.param_id == param_id).where(self.Records.value == value)
-        cursor = self.connection.execute(res)
         return cursor.keys(), cursor.fetchall()
 
     #not tested
