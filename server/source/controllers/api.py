@@ -10,19 +10,23 @@ requests_controller = Blueprint("requests_controller", __name__)
 ###                   PARAMETERS                   ###
 ######################################################
 
+#работает
 @requests_controller.route('/api/markers/get', methods=["POST", "GET"])
 def api_markers_get():
-    return jsonify(mapper.markers.get_all())
+    limit = int(request.args.get('limit', 100))
+    skip = int(request.args.get('skip', 0))
+    return jsonify(mapper.markers.get_all(skip, limit))
 
-#new
+#работает
 @requests_controller.route('/api/markers/get_all_langs', methods=["POST", "GET"])
 def api_markers_get_langs():
     return jsonify(mapper.markers.get_all_langs())
 
-#new
+#работает
 @requests_controller.route('/api/markers/get_all_markers_by_lang', methods=["POST", "GET"])
 def api_markers_get_by_langs():
-    return jsonify(mapper.markers.get_all_markers_by_lang())   
+    lang = request.args.get('lang')
+    return jsonify(mapper.markers.get_all_markers_by_lang(lang))   
 
 @requests_controller.route('/api/parameters/get', methods=["POST", "GET"])
 def api_parameters_get():
@@ -38,17 +42,22 @@ def api_get_by_params():
     query = request.get_json()
     return jsonify(mapper.records.get_by_parameters(query))
 
+#работает
+@requests_controller.route('/api/records/get_all', methods=["POST", "GET"])
+def api_get_all_records():
+    limit = int(request.args.get('limit', 100))
+    skip = int(request.args.get('skip', 0))
+    return jsonify(mapper.records.get_all(skip, limit))
+        
+
 """
 test = {
     "params" : [
         { "1b" : "0" },
-        { "1a" : "1" },
-        { "1c" : "1" },
-        { "1d" : "ND" },
-        { "1e" : "0?" }
+        { "1a" : "0" }
     ],
     "params_options" : ">2",
     "res_type" : "markers",
-    "langs": [языки по которым поиск]
+    "langs": []
 }
 """

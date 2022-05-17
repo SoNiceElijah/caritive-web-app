@@ -7,27 +7,25 @@ class Marker:
         self.Markers = Base.classes.markers
         self.connection = engine.connect()
     
-    #not tested with limit/offset
+    #работает
     @from_keys
-    def get_all(self):
-        limit = int(request.args.get('limit'))
-        skip = int(request.args.get('skip'))
+    def get_all(self, skip, limit):
         query = select([self.Markers]).limit(limit).offset(skip)
         cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
 
-    #not tested
+    #работает
     @from_keys
     def get_all_langs(self):
-        query = "SELECT DISTINCT lang FROM markers"
-        cursor = self.connection.execute(text(query))
+        #query = "SELECT DISTINCT lang FROM markers"
+        query = select([self.Markers.lang]).distinct()
+        cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
 
-    #not tested
+    #работает
     @from_keys
-    def get_all_markers_by_lang(self):
-        lang = request.args.get('lang')
-        #query = f"SELECT DISTINCT marker_id FROM markers WHERE lang='{lang}'"
-        query = select([self.Markers.marker_id]).where(self.Markers.lang == lang).distinct()
+    def get_all_markers_by_lang(self, lang):
+        #query = f"SELECT DISTINCT id FROM markers WHERE lang='{lang}'"
+        query = select([self.Markers.id]).where(self.Markers.lang == lang).distinct()
         cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
