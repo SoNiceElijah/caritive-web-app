@@ -10,7 +10,6 @@ class Parameter:
     @from_keys
     def get_all(self):
         query = select([self.Parameters, self.ParametersTypes.description, self.ParametersTypes.color]).join(self.ParametersTypes)
-        print(query)
         cursor = self.connection.execute(query)
         return cursor.keys(), cursor.fetchall()
 

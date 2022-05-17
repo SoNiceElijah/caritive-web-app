@@ -68,42 +68,42 @@ function Card(props) {
             return true;
         }
         if(showMode === 1) {
-            if(item.value == '0') {
+            if(item.value === '0') {
                 return true;
             } else {
                 return false;
             }
         }
         if(showMode === 2) {
-            if(item.value == '1') {
+            if(item.value === '1') {
                 return true;
             } else {
                 return false;
             }
         }
         if(showMode === 3) {
-            if(item.value == '0?') {
+            if(item.value === '0?') {
                 return true;
             } else {
                 return false;
             }
         }
         if(showMode === 4) {
-            if(item.value == '1?') {
+            if(item.value === '1?') {
                 return true;
             } else {
                 return false;
             }
         }
         if(showMode === 5) {
-            if(item.value == 'IRR') {
+            if(item.value === 'IRR') {
                 return true;
             } else {
                 return false;
             }
         }
         if(showMode === 6) {
-            if(item.value == 'ND') {
+            if(item.value === 'ND') {
                 return true;
             } else {
                 return false;
@@ -129,7 +129,9 @@ function Card(props) {
                 <div className="font-light text-center basis-1/12 rounded-l-md px-2 my-2 border-r-[1px] border-gray-300">{props.lang}</div>
                 <div className="py-2 px-4 basis-11/12" >{props.value}</div>
             </div>
-            <div className={`overflow-hidden transition-all duration-500 h-${state} `}>
+            <div className='hidden h-0'></div>
+            <div className='hidden h-fit'></div>
+            <div className={`overflow-hidden h-${state} `}>
                 <div className='my-4 px-4 border-l-[1px] border-slate-300'>
                     <h1 className='text-2xl font-bold mt-5'>{props.object.value}</h1>
                     <h3 className='text-gray-700 '>{props.object.lang}</h3>

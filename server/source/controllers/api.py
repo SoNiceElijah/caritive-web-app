@@ -27,6 +27,11 @@ def api_records_get_by_m_id():
 def api_markers_get():
     return jsonify(mapper.markers.get_all())
 
+@requests_controller.route('/api/markers/get_by_params', methods=["POST", "GET"])
+def api_markers_get_by_params():
+    j = request.json
+    return jsonify(mapper.markers.get_by_params(j))
+
 """
 test = {
     "params" : [

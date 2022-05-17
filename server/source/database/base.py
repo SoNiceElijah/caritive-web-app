@@ -35,4 +35,3 @@ def from_keys(f):
             objs.append(obj)
         return objs
     return wrapper
-

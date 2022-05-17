@@ -1,35 +1,19 @@
 
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-
 function ParametersPage(props) {
 
-    const [ parameters, setParameters ] = useState([ ]);
-    useEffect(() => {
-       axios.post('/api/parameters/get')
-            .then((res) => { 
-                console.log(res.data.length);
-                const inColors = {};
-                for(const p of res.data) {
-                    inColors[p.type] = '#' + Math.floor(Math.random() * (2 ** 24)).toString(16).padStart('0',6);
-                }
-                setParameters(res.data);
-                props.setColors(inColors);
-             });
-    }, props.anchor);
+    const { parameters } = props;
 
     function drawParam(param, i) {
         return (
-            <div key={i} className='parameter'>
-                <div className='parameter-header'>
-                    <span style={{ backgroundColor : props.colors[param.type]}} className='parameter-header-color'></span>
-                    <span className='parameter-header-id'>{param.id}</span>
-                    <span className='parameter-header-name'>{param.name}</span>
+            <div key={i} className='mt-4'>
+                <div className='flex flex-row space-x-2'>
+                    <div className='rounded-md bg-slate-200 p-2'>{param.id}</div>
+                    <div className='rounded-md bg-slate-200 p-2 ml-2'>{param.name}</div>
                 </div>
                 <div className='parameter-body'>
                     {param.example ? (
                     <div className='parameter-example'>
-                        <div className='parameter-example-content'>
+                        <div className='mt-4 px-4 border-l-2 border-slate-300'>
                             {param.example}
                         </div>
                     </div>) : ""
@@ -41,7 +25,7 @@ function ParametersPage(props) {
 
     return (
         <div className={`parameter-page parameter-page-state-${props.state}`}>
-            <h1>Параметры</h1>
+            <h1 className='mt-4 font-bold '>Параметры</h1>
             <div className='parameters-list'>
                 {parameters.map(drawParam)}
             </div>
