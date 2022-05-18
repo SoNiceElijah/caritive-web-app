@@ -18,11 +18,12 @@ function MainPage(props) {
     const [ parameters, loadParameters ] = useState([]);
     const [ parameterBar, setParameterBar ] = useState([]);
     const [ bbBtn, setBBBtn ] = useState([false, false, false, false, false]);
+    const [ langs, loadLangs ] = useState([]);
 
     useEffect(() => {
         axios.post('/api/markers/get_by_params', { })
             .then((res) => { 
-                loadCards(res.data);
+                loadCards(res.data.data);
              });
         axios.post('/api/parameters/get')
             .then((res) => { 
@@ -34,6 +35,10 @@ function MainPage(props) {
 
                 setParameterBar(bar);
         });
+        axios.post('/api/languages/get')
+            .then((res) => {
+                loadLangs(res.data);
+            })
     }, base);
 
     const mergedParams = [];
@@ -67,7 +72,7 @@ function MainPage(props) {
         }
         axios.post('/api/markers/get_by_params', params)
             .then((res) => { 
-                loadCards(res.data);
+                loadCards(res.data.data);
              });
     }
 
@@ -177,11 +182,39 @@ function MainPage(props) {
         reload();
     }
 
+    const validVals = ['0', '1', '0?', '1?', 'IRR', 'ND'];
+    function parseInput(text) {
+        try {
+            makeAllParameters(-1);
+            const tokens = text.split(',').map(e => e.trim()).filter(e => e);
+            for(const token of tokens) {
+                const [ param, value ] = token.split('=');
+                let line = -1;
+                for(let i = 0; i < parameters.length; ++i) {
+                    if(parameters[i].id == param) {
+                        line = i;
+                        break;
+                    }
+                }
+                if(line == -1)
+                    return;
+
+                if(!validVals.includes(value))
+                    return;
+
+                const btn = validVals.indexOf(value);
+                makeParameters(line, btn);
+            }
+        } catch(ex) {
+            console.log(ex);
+        }
+    }
+
     return (
         <div>
             <div className='container mx-auto p-4'>
                 <div className='serach-panel'>
-                    <SearchBar />
+                    <SearchBar parseInput={parseInput} />
                 </div>
                 <div>
                     <StatusBar 
@@ -215,7 +248,7 @@ function MainPage(props) {
                                     makeAllParameters={makeAllParameters}
                                 />)
                             : page === 3 ?
-                                (<LangsPage />)
+                                (<LangsPage langs={langs} />)
                             : ""
                         }
                     </div>

@@ -22,16 +22,19 @@ def pack(*params):
         return wrapper
     return deco
 
+def repack(keys, res):
+    objs = []
+    for r in res:
+        obj = {}
+        i = 0
+        for k in keys:
+            obj[k] = r[i]
+            i += 1
+        objs.append(obj)
+    return objs
+
 def from_keys(f):
     def wrapper(*args, **kwargs):
         keys, res = f(*args, **kwargs)
-        objs = []
-        for r in res:
-            obj = {}
-            i = 0
-            for k in keys:
-                obj[k] = r[i]
-                i += 1
-            objs.append(obj)
-        return objs
+        return repack(keys, res)
     return wrapper

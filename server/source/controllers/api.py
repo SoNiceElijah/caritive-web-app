@@ -32,6 +32,10 @@ def api_markers_get_by_params():
     j = request.json
     return jsonify(mapper.markers.get_by_params(j))
 
+@requests_controller.route('/api/languages/get', methods=["POST", "GET"])
+def api_language_get():
+    return jsonify(mapper.markers.get_all_langs())
+
 """
 test = {
     "params" : [
