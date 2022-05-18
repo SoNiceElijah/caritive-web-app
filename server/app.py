@@ -3,7 +3,7 @@ from source.controllers.api import requests_controller
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/api/index')
 def hello():
     return 'Hello, World!'
 
