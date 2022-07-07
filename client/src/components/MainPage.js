@@ -141,8 +141,8 @@ function MainPage(props) {
         reload();
     }
     
-    function makeParameters(line, btn) {
-        parameterBar[line][btn] = !parameterBar[line][btn];
+    function makeParameters(line, btn, val = false) {
+        parameterBar[line][btn] = val || !parameterBar[line][btn];
 
         let enabled = true;
         for(const bar of parameterBar) {
@@ -198,12 +198,12 @@ function MainPage(props) {
                 }
                 if(line == -1)
                     return;
-
+         
                 if(!validVals.includes(value))
                     return;
 
                 const btn = validVals.indexOf(value);
-                makeParameters(line, btn);
+                makeParameters(line, btn, true);
             }
         } catch(ex) {
             console.log(ex);
