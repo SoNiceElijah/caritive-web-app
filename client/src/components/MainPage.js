@@ -141,8 +141,8 @@ function MainPage(props) {
         reload();
     }
     
-    function makeParameters(line, btn, val = false) {
-        parameterBar[line][btn] = val || !parameterBar[line][btn];
+    function makeParameters(line, btn) {
+        parameterBar[line][btn] = !parameterBar[line][btn];
 
         let enabled = true;
         for(const bar of parameterBar) {
@@ -159,12 +159,26 @@ function MainPage(props) {
 
         if(btn === -1) {
             const bar = [];
-            for(const _p of parameterBar) {
+            for(const item of parameterBar) {
+
+                item[0] = false;
+                item[1] = false;
+                item[2] = false;
+                item[3] = false;
+                item[4] = false;
+
                 bar.push([false, false, false, false, false]);
             }
             
+            bbBtn[0] = false;
+            bbBtn[1] = false;
+            bbBtn[2] = false;
+            bbBtn[3] = false;
+            bbBtn[4] = false;
+
             setBBBtn([false, false, false, false, false]);
             setParameterBar(bar);
+
             return;
         }
 
@@ -187,27 +201,61 @@ function MainPage(props) {
         try {
             makeAllParameters(-1);
             const tokens = text.split(',').map(e => e.trim()).filter(e => e);
-            for(const token of tokens) {
-                const [ param, value ] = token.split('=');
-                let line = -1;
-                for(let i = 0; i < parameters.length; ++i) {
-                    if(parameters[i].id == param) {
-                        line = i;
-                        break;
-                    }
-                }
-                if(line == -1)
-                    return;
-         
-                if(!validVals.includes(value))
-                    return;
 
-                const btn = validVals.indexOf(value);
-                makeParameters(line, btn, true);
+            if (!tokens.length) {
+                reload();
+            }
+
+            for(const token of tokens) {
+
+                if (token.includes('=')) {
+
+                    const [ param, value ] = token.split('=');
+                    let line = -1;
+                    for(let i = 0; i < parameters.length; ++i) {
+                        if(parameters[i].id === param) {
+                            line = i;
+                            break;
+                        }
+                    }
+                    if(line === -1)
+                        return false;
+            
+                    if(!validVals.includes(value))
+                        return false;
+
+                    const btn = validVals.indexOf(value);
+
+                    console.log(line, btn);
+                    makeParameters(line, btn);
+                }
+
+                if (token.includes('~')) {
+                    const [ param, value ] = token.split('~');
+                    if (!validVals.includes(param))
+                        return;
+
+                    if (!validVals.includes(value))
+                        return;
+
+
+                    alias[0][0] = false;
+                    alias[0][1] = false;
+                    alias[0][2] = false;
+
+                    alias[1][0] = false;
+                    alias[1][1] = false;
+                    alias[1][2] = false;
+
+                    makeAlias(`${param}to${value}`);
+                }
             }
         } catch(ex) {
-            console.log(ex);
+            console.error(ex);
+            return false;
         }
+
+        return true;
     }
 
     return (
